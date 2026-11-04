@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # Base directory for the backend (where .env is located)
@@ -12,11 +13,12 @@ class Settings(BaseSettings):
     APP_NAME: str = "Project Sentinel API"
     APP_VERSION: str = "0.1.0"
     DATABASE_URL: str = ""
+    TEST_DATABASE_URL: str = ""
 
     # JWT Authentication Configuration
     JWT_SECRET_KEY: str = ""
-    JWT_ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    JWT_ALGORITHM: str = Field(default="HS256", pattern="^HS256$")
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(default=30, gt=0)
 
     model_config = SettingsConfigDict(
         env_file=BACKEND_DIR / ".env",
